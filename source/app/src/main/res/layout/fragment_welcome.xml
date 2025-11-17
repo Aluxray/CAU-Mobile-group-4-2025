@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="#FFFFFF"
+    tools:context=".ui.welcome.WelcomeFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <!-- Top Illustration -->
+
+        <!-- Welcome Texts -->
+
+        <ImageView
+            android:id="@+id/topImage"
+            android:layout_width="match_parent"
+            android:layout_height="375dp"
+            android:contentDescription="@string/welcome_image_desc"
+            android:scaleType="fitXY"
+            android:src="@drawable/welcome_image" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginHorizontal="34dp"
+            android:layout_marginVertical="4dp"
+            android:fontFamily="sans-serif"
+            android:text="@string/welcome_to_app"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textFontWeight="400" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginHorizontal="34dp"
+            android:layout_marginVertical="4dp"
+            android:fontFamily="sans-serif"
+            android:text="@string/welcome_to_app_name"
+            android:textColor="#000000"
+            android:textSize="38sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginHorizontal="34dp"
+            android:layout_marginVertical="4dp"
+            android:fontFamily="sans-serif"
+            android:text="@string/welcome_app_description"
+            android:textColor="#898989"
+            android:textSize="13sp"
+            android:textFontWeight="500" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginHorizontal="34dp"
+            android:layout_marginVertical="4dp"
+            android:fontFamily="sans-serif"
+            android:text="@string/welcome_join_app"
+            android:textColor="#898989"
+            android:textSize="13sp"
+            android:textFontWeight="500" />
+
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginVertical="28dp"
+            android:layout_marginHorizontal="34dp"
+            android:gravity="center_horizontal"
+            android:weightSum="2">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/create_account"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_button"
+                android:backgroundTint="?attr/colorSecondary"
+                android:text="@string/create_account"
+                android:textColor="?attr/colorOnSecondary"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:textFontWeight="600"
+                android:layout_marginEnd="12dp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/sign_in"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:paddingHorizontal="38dp"
+                android:background="@drawable/rounded_button"
+                android:backgroundTint="?attr/colorPrimary"
+                android:drawableEnd="@drawable/arrow_right"
+                android:drawableTint="?attr/colorOnPrimary"
+                android:text="@string/welcome_sign_in"
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:textFontWeight="600"/>
+
+        </LinearLayout>
+
+        <!-- Social Login Text -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/social_login"
+            android:textSize="12sp"
+            android:textColor="#898989"
+            android:fontFamily="sans-serif"
+            android:textFontWeight="500"/>
+
+        <!-- Social Icons -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="16dp">
+
+            <ImageButton
+                android:background=""
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/kakao_talk_icon"
+                android:layout_marginEnd="24dp"
+                android:contentDescription="@string/kakao_login"/>
+
+            <ImageButton
+                android:background=""
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/naver_icon"
+                android:layout_marginEnd="24dp"
+                android:contentDescription="@string/naver_login"/>
+
+            <ImageButton
+                android:background=""
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/google_icon"
+                android:contentDescription="@string/google_login"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
