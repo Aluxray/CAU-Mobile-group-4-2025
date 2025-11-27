@@ -86,14 +86,14 @@
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
+                android:layout_marginEnd="12dp"
                 android:background="@drawable/rounded_button"
                 android:backgroundTint="?attr/colorSecondary"
                 android:text="@string/create_account"
                 android:textColor="?attr/colorOnSecondary"
                 android:textSize="16sp"
                 android:textAllCaps="false"
-                android:textFontWeight="600"
-                android:layout_marginEnd="12dp"/>
+                android:textFontWeight="600" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/sign_in"
@@ -109,7 +109,7 @@
                 android:textColor="?attr/colorOnPrimary"
                 android:textSize="16sp"
                 android:textAllCaps="false"
-                android:textFontWeight="600"/>
+                android:textFontWeight="600" />
 
         </LinearLayout>
 
@@ -121,7 +121,7 @@
             android:textSize="12sp"
             android:textColor="#898989"
             android:fontFamily="sans-serif"
-            android:textFontWeight="500"/>
+            android:textFontWeight="500" />
 
         <!-- Social Icons -->
         <LinearLayout
@@ -132,27 +132,27 @@
             android:layout_marginTop="16dp">
 
             <ImageButton
-                android:background=""
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:src="@drawable/kakao_talk_icon"
                 android:layout_marginEnd="24dp"
-                android:contentDescription="@string/kakao_login"/>
+                android:contentDescription="@string/kakao_login"
+                android:background="?attr/selectableItemBackgroundBorderless" />
 
             <ImageButton
-                android:background=""
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:src="@drawable/naver_icon"
                 android:layout_marginEnd="24dp"
-                android:contentDescription="@string/naver_login"/>
+                android:contentDescription="@string/naver_login"
+                android:background="?attr/selectableItemBackgroundBorderless" />
 
             <ImageButton
-                android:background=""
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:src="@drawable/google_icon"
-                android:contentDescription="@string/google_login"/>
+                android:contentDescription="@string/google_login"
+                android:background="?attr/selectableItemBackgroundBorderless" />
         </LinearLayout>
 
     </LinearLayout>

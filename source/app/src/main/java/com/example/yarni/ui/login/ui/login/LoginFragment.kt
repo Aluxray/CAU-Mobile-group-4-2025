@@ -17,7 +17,8 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import com.example.yarni.databinding.FragmentLoginBinding
 
-import com.example.yarni.ui.login.R
+import com.example.yarni.R
+
 
 class LoginFragment : Fragment() {
 

@@ -7,7 +7,7 @@ import android.util.Patterns
 import com.example.yarni.ui.login.data.LoginRepository
 import com.example.yarni.ui.login.data.Result
 
-import com.example.yarni.ui.login.R
+import com.example.yarni.R
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
