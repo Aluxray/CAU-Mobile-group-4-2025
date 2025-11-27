@@ -14,9 +14,6 @@
         android:gravity="center_horizontal">
 
         <!-- Top Illustration -->
-
-        <!-- Welcome Texts -->
-
         <ImageView
             android:id="@+id/topImage"
             android:layout_width="match_parent"
@@ -25,6 +22,7 @@
             android:scaleType="fitXY"
             android:src="@drawable/welcome_image" />
 
+        <!-- Welcome Texts -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
