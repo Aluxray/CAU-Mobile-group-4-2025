@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="@android:color/white"
-    tools:context=".ui.login.ui.login.LoginFragment">
+    tools:context=".ui.register.ui.register.RegisterFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="52dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="12dp"
             android:gravity="center_horizontal"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -71,8 +71,6 @@
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeActionLabel="@string/action_sign_in_short"
-                    android:imeOptions="actionDone"
                     android:inputType="textPassword"
                     android:selectAllOnFocus="true"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -80,20 +78,41 @@
                     app:layout_constraintTop_toBottomOf="@+id/username" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Confirm password -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/confirmPasswordLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="@string/prompt_confirm_password"
+                app:endIconMode="password_toggle">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/confirmPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeActionLabel="@string/action_sign_in_short"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPassword"
+                    android:selectAllOnFocus="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/password" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Create account button -->
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/login"
+                android:id="@+id/create_account"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
-                android:layout_gravity="center"
                 android:layout_marginTop="24dp"
                 android:layout_weight="1"
                 android:background="@drawable/rounded_button"
                 android:backgroundTint="?attr/colorPrimary"
-                android:drawableEnd="@drawable/arrow_right"
-                android:drawableTint="?attr/colorOnPrimary"
                 android:enabled="false"
-                android:paddingHorizontal="112dp"
-                android:text="@string/welcome_sign_in"
+                android:paddingHorizontal="26dp"
+                android:text="@string/create_account"
                 android:textAllCaps="false"
                 android:textColor="?attr/colorOnPrimary"
                 android:textFontWeight="600"
@@ -102,7 +121,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/password"
-                app:layout_constraintVertical_bias="0.2" />
+                app:layout_constraintVertical_bias="0.2"/>
 
             <ProgressBar
                 android:id="@+id/loading"
@@ -126,22 +145,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
-                android:text="@string/no_account_text"
+                android:text="@string/account_exists_text"
                 android:textColor="#898989"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <!-- Create account button -->
+            <!-- Sign in button -->
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/create_account"
+                android:id="@+id/login"
                 android:layout_width="156dp"
                 android:layout_height="46dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="16dp"
                 android:layout_weight="1"
                 android:background="@drawable/rounded_button"
-                android:text="@string/create_account"
+                android:backgroundTint="?attr/colorSecondary"
+                android:drawableEnd="@drawable/arrow_right"
+                android:drawableTint="?attr/colorOnSecondary"
+                android:paddingHorizontal="36dp"
+                android:text="@string/welcome_sign_in"
                 android:textAllCaps="false"
                 android:textColor="?attr/colorOnSecondary"
                 android:textFontWeight="600"
