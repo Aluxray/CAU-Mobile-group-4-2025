@@ -33,4 +33,6 @@
     <string name="kakao_login">Kakao login</string>
     <string name="naver_login">Naver login</string>
     <string name="google_login">Google login</string>
+    <string name="username">Username</string>
+    <string name="no_account_text">Don\'t have an account? Create one!</string>
 </resources>
