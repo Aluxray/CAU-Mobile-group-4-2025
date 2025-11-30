@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +16,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.example.yarni.databinding.FragmentLoginBinding
 
 import com.example.yarni.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.ktx.Firebase
 
 
 class LoginFragment : Fragment() {
@@ -28,6 +33,12 @@ class LoginFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private lateinit var auth: FirebaseAuth
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        auth = FirebaseAuth.getInstance()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,91 +51,57 @@ class LoginFragment : Fragment() {
 
     }
 
+    public override fun onStart() {
+        super.onStart()
+        if (auth.currentUser != null) {
+            Log.d("LoginFragment", "Utilisateur déjà connecté: ${auth.currentUser?.email}")
+            findNavController().navigate(R.id.action_nav_login_to_nav_home)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
-            .get(LoginViewModel::class.java)
+//        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
+//            .get(LoginViewModel::class.java)
 
         val usernameEditText = binding.username
         val passwordEditText = binding.password
         val loginButton = binding.login
         val loadingProgressBar = binding.loading
 
-        loginViewModel.loginFormState.observe(
-            viewLifecycleOwner,
-            Observer { loginFormState ->
-                if (loginFormState == null) {
-                    return@Observer
-                }
-                loginButton.isEnabled = loginFormState.isDataValid
-                loginFormState.usernameError?.let {
-                    usernameEditText.error = getString(it)
-                }
-                loginFormState.passwordError?.let {
-                    passwordEditText.error = getString(it)
-                }
-            })
-
-        loginViewModel.loginResult.observe(
-            viewLifecycleOwner,
-            Observer { loginResult ->
-                loginResult ?: return@Observer
-                loadingProgressBar.visibility = View.GONE
-                loginResult.error?.let {
-                    showLoginFailed(it)
-                }
-                loginResult.success?.let {
-                    updateUiWithUser(it)
-                }
-            })
-
-        val afterTextChangedListener = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                // ignore
-            }
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                // ignore
-            }
-
-            override fun afterTextChanged(s: Editable) {
-                loginViewModel.loginDataChanged(
-                    usernameEditText.text.toString(),
-                    passwordEditText.text.toString()
-                )
-            }
-        }
-        usernameEditText.addTextChangedListener(afterTextChangedListener)
-        passwordEditText.addTextChangedListener(afterTextChangedListener)
-        passwordEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                loginViewModel.login(
-                    usernameEditText.text.toString(),
-                    passwordEditText.text.toString()
-                )
-            }
-            false
-        }
-
         loginButton.setOnClickListener {
-            loadingProgressBar.visibility = View.VISIBLE
-            loginViewModel.login(
-                usernameEditText.text.toString(),
-                passwordEditText.text.toString()
-            )
+            val email = usernameEditText.text.toString()
+            val password = passwordEditText.text.toString()
+
+            if (email.isNotBlank() && password.isNotBlank()) {
+                loadingProgressBar.visibility = View.VISIBLE
+
+                auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(requireActivity()) { task ->
+                        loadingProgressBar.visibility = View.GONE
+                        if (task.isSuccessful) {
+                            Log.d("LoginFragment", "signInWithEmail:success")
+                            val user = auth.currentUser
+                            Toast.makeText(
+                                requireContext(),
+                                "Connexion réussie: ${user?.email}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            findNavController().navigate(R.id.action_nav_login_to_nav_home)
+                        } else {
+                            Log.w("LoginFragment", "signInWithEmail:failure", task.exception)
+                            Toast.makeText(
+                                requireContext(),
+
+                                "Échec de l'authentification.",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        }
+                    }
+            } else {
+                Toast.makeText(requireContext(), "Veuillez entrer un e-mail et un mot de passe.", Toast.LENGTH_SHORT).show()
+            }
         }
-    }
-
-    private fun updateUiWithUser(model: LoggedInUserView) {
-        val welcome = getString(R.string.welcome) + model.displayName
-        // TODO : initiate successful logged in experience
-        val appContext = context?.applicationContext ?: return
-        Toast.makeText(appContext, welcome, Toast.LENGTH_LONG).show()
-    }
-
-    private fun showLoginFailed(@StringRes errorString: Int) {
-        val appContext = context?.applicationContext ?: return
-        Toast.makeText(appContext, errorString, Toast.LENGTH_LONG).show()
     }
 
     override fun onDestroyView() {

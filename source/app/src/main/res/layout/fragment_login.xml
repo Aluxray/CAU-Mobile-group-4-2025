@@ -91,7 +91,7 @@
                 android:backgroundTint="?attr/colorPrimary"
                 android:drawableEnd="@drawable/arrow_right"
                 android:drawableTint="?attr/colorOnPrimary"
-                android:enabled="false"
+                android:enabled="true"
                 android:paddingHorizontal="112dp"
                 android:text="@string/welcome_sign_in"
                 android:textAllCaps="false"
