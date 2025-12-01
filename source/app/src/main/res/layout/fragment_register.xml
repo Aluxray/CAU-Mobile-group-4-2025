@@ -110,7 +110,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/rounded_button"
                 android:backgroundTint="?attr/colorPrimary"
-                android:enabled="false"
+                android:enabled="true"
                 android:paddingHorizontal="26dp"
                 android:text="@string/create_account"
                 android:textAllCaps="false"

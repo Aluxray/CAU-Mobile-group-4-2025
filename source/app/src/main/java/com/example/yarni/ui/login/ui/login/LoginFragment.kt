@@ -1,28 +1,16 @@
 package com.example.yarni.ui.login.ui.login
 
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.annotation.StringRes
-import androidx.fragment.app.Fragment
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.yarni.databinding.FragmentLoginBinding
-
 import com.example.yarni.R
+import com.example.yarni.databinding.FragmentLoginBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
-import com.google.firebase.ktx.Firebase
 
 
 class LoginFragment : Fragment() {
@@ -61,8 +49,8 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
-//            .get(LoginViewModel::class.java)
+
+        val registerButton = binding.createAccount
 
         val usernameEditText = binding.username
         val passwordEditText = binding.password
@@ -102,6 +90,11 @@ class LoginFragment : Fragment() {
                 Toast.makeText(requireContext(), "Veuillez entrer un e-mail et un mot de passe.", Toast.LENGTH_SHORT).show()
             }
         }
+
+        registerButton.setOnClickListener {
+            findNavController().navigate(R.id.action_nav_login_to_nav_register)
+        }
+
     }
 
     override fun onDestroyView() {

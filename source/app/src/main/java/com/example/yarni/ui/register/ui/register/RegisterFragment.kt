@@ -50,17 +50,19 @@ class RegisterFragment : Fragment() {
         super.onStart()
         if (auth.currentUser != null) {
             Log.d("LoginFragment", "Utilisateur déjà connecté: ${auth.currentUser?.email}")
-            findNavController().navigate(R.id.action_nav_login_to_nav_home)
+            findNavController().navigate(R.id.action_nav_register_to_nav_home)
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val loginButton = binding.login
+
         val usernameEditText = binding.username
         val passwordEditText = binding.password
         val confirmPasswordEditText = binding.confirmPassword
-        val registerButton = binding.login
+        val registerButton = binding.createAccount
         val loadingProgressBar = binding.loading
 
         registerButton.setOnClickListener {
@@ -76,7 +78,7 @@ class RegisterFragment : Fragment() {
                         if (task.isSuccessful) {
                             Log.d("LoginFragment", "createUserWithEmail:success")
                             Toast.makeText(requireContext(), "Compte créé avec succès.", Toast.LENGTH_SHORT).show()
-                            findNavController().navigate(R.id.action_nav_login_to_nav_home)
+                            findNavController().navigate(R.id.action_nav_register_to_nav_home)
                         } else {
                             Log.w("LoginFragment", "createUserWithEmail:failure", task.exception)
                             Toast.makeText(requireContext(), "Échec de l'inscription: ${task.exception?.message}", Toast.LENGTH_LONG).show()
@@ -86,6 +88,11 @@ class RegisterFragment : Fragment() {
                 Toast.makeText(requireContext(), "Veuillez remplir tous les champs pour vous inscrire.", Toast.LENGTH_SHORT).show()
             }
         }
+
+        loginButton.setOnClickListener {
+            findNavController().navigate(R.id.action_nav_register_to_nav_login)
+        }
+
     }
 
     override fun onDestroyView() {
