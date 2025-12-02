@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Yarni</string>
+    <string name="app_name" translatable="false">Yarni</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -10,4 +10,38 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_up">Sign up</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome!"</string>
+    <string name="invalid_email">Not a valid email</string>
+    <string name="invalid_password">Password must be >8 characters</string>
+    <string name="login_failed">"Login failed"</string>
+
+    <!-- Strings related to welcome page -->
+    <string name="welcome_to_app">Welcome to</string>
+    <string name="welcome_to_app_name">Yarni</string>
+    <string name="welcome_image_desc">Welcome image with pictures being uploaded to the cloud.</string>
+    <string name="welcome_app_description">Upload your crochet and knitting patterns on our cloud, and get tips to crochet and knit better!</string>
+    <string name="welcome_join_app">Join for free.</string>
+    <string name="create_account">Create account</string>
+    <string name="welcome_sign_in">Sign in</string>
+    <string name="social_login">Use social login</string>
+    <string name="kakao_login">Kakao login</string>
+    <string name="naver_login">Naver login</string>
+    <string name="google_login">Google login</string>
+    <string name="email">Email</string>
+    <string name="create_email">Email <font color="#FF0000">*</font></string>
+    <string name="create_password">Password <font color="#FF0000">*</font></string>
+    <string name="create_confirm_password">Confirm password <font color="#FF0000">*</font></string>
+    <string name="no_account_text">Don\'t have an account? Create one!</string>
+    <string name="register_failed">Register failed</string>
+    <string name="passwords_dont_match">Passwords don\'t match</string>
+    <string name="prompt_confirm_password">Confirm password</string>
+    <string name="account_exists_text">Already have an account? Login here!</string>
+    <string name="create_password_label">Must be at least 8 characters long and contain a letter, a number and a special character.</string>
 </resources>
