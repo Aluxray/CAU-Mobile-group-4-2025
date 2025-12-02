@@ -1,13 +1,12 @@
 package com.example.yarni.ui.register.ui.register
 
+import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import android.util.Patterns
+import com.example.yarni.R
 import com.example.yarni.ui.register.data.RegisterRepository
 import com.example.yarni.ui.register.data.Result
-
-import com.example.yarni.R
 
 class RegisterViewModel(private val registerRepository: RegisterRepository) : ViewModel() {
 
@@ -17,9 +16,9 @@ class RegisterViewModel(private val registerRepository: RegisterRepository) : Vi
     private val _registerResult = MutableLiveData<RegisterResult>()
     val registerResult: LiveData<RegisterResult> = _registerResult
 
-    fun register(username: String, password: String) {
+    fun register(email: String, password: String) {
         // can be launched in a separate asynchronous job
-        val result = registerRepository.register(username, password)
+        val result = registerRepository.register(email, password)
 
         if (result is Result.Success) {
             _registerResult.value =
@@ -29,9 +28,9 @@ class RegisterViewModel(private val registerRepository: RegisterRepository) : Vi
         }
     }
 
-    fun registerDataChanged(username: String, password: String, confirmPassword: String) {
-        if (!isUserNameValid(username)) {
-            _registerForm.value = RegisterFormState(usernameError = R.string.invalid_username)
+    fun registerDataChanged(email: String, password: String, confirmPassword: String) {
+        if (!isUserNameValid(email)) {
+            _registerForm.value = RegisterFormState(emailError = R.string.invalid_email)
         } else if (!isPasswordValid(password)) {
             _registerForm.value = RegisterFormState(passwordError = R.string.invalid_password)
         } else if (password.compareTo(confirmPassword) != 0) {
@@ -41,11 +40,13 @@ class RegisterViewModel(private val registerRepository: RegisterRepository) : Vi
         }
     }
 
-    private fun isUserNameValid(username: String): Boolean {
-        return username.isNotBlank() && username.length > 3
+    private fun isUserNameValid(email: String): Boolean {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
     private fun isPasswordValid(password: String): Boolean {
-        return password.contains(Regex.fromLiteral("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&_-])[A-Za-z\\d@$!%*?&_-]{8,}$"))
+        return Regex
+            .fromLiteral("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&_-])[A-Za-z\\d@$!%*?&_-]{8,}$")
+            .matches(password)
     }
 }

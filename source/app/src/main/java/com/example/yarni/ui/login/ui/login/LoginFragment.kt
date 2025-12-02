@@ -52,13 +52,13 @@ class LoginFragment : Fragment() {
 
         val registerButton = binding.createAccount
 
-        val usernameEditText = binding.username
+        val emailEditText = binding.email
         val passwordEditText = binding.password
         val loginButton = binding.login
         val loadingProgressBar = binding.loading
 
         loginButton.setOnClickListener {
-            val email = usernameEditText.text.toString()
+            val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
 
             if (email.isNotBlank() && password.isNotBlank()) {

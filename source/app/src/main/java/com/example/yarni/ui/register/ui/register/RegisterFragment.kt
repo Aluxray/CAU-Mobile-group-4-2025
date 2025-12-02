@@ -59,14 +59,14 @@ class RegisterFragment : Fragment() {
 
         val loginButton = binding.login
 
-        val usernameEditText = binding.username
+        val emailEditText = binding.email
         val passwordEditText = binding.password
         val confirmPasswordEditText = binding.confirmPassword
         val registerButton = binding.createAccount
         val loadingProgressBar = binding.loading
 
         registerButton.setOnClickListener {
-            val email = usernameEditText.text.toString()
+            val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
 
             if (email.isNotBlank() && password.isNotBlank() && password == confirmPasswordEditText.text.toString()) {
