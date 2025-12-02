@@ -35,9 +35,13 @@
     <string name="naver_login">Naver login</string>
     <string name="google_login">Google login</string>
     <string name="username">Username</string>
+    <string name="create_username">Username <font color="#FF0000">*</font></string>
+    <string name="create_password">Password <font color="#FF0000">*</font></string>
+    <string name="create_confirm_password">Confirm password <font color="#FF0000">*</font></string>
     <string name="no_account_text">Don\'t have an account? Create one!</string>
     <string name="register_failed">Register failed</string>
     <string name="passwords_dont_match">Passwords don\'t match</string>
     <string name="prompt_confirm_password">Confirm password</string>
     <string name="account_exists_text">Already have an account? Login here!</string>
+    <string name="create_password_label">Must be at least 8 characters long and contain a letter, a number and a special character.</string>
 </resources>
