@@ -41,17 +41,11 @@ class RegisterViewModel(private val registerRepository: RegisterRepository) : Vi
         }
     }
 
-    // A placeholder username validation check
     private fun isUserNameValid(username: String): Boolean {
-        return if (username.contains("@")) {
-            Patterns.EMAIL_ADDRESS.matcher(username).matches()
-        } else {
-            username.isNotBlank()
-        }
+        return username.isNotBlank() && username.length > 3
     }
 
-    // A placeholder password validation check
     private fun isPasswordValid(password: String): Boolean {
-        return password.length > 8
+        return password.contains(Regex.fromLiteral("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&_-])[A-Za-z\\d@$!%*?&_-]{8,}$"))
     }
 }
