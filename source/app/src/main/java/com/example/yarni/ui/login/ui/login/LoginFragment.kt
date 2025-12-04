@@ -39,7 +39,7 @@ class LoginFragment : Fragment() {
 
     }
 
-    public override fun onStart() {
+    override fun onStart() {
         super.onStart()
         if (auth.currentUser != null) {
             Log.d("LoginFragment", "Utilisateur déjà connecté: ${auth.currentUser?.email}")
