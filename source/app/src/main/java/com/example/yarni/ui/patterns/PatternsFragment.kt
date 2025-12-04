@@ -1,10 +1,12 @@
 package com.example.yarni.ui.patterns
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -29,6 +31,15 @@ class PatternsFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private val pickFile =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            if (uri != null) {
+                // Use contentResolver to read file
+                val stream = requireContext().contentResolver.openInputStream(uri)
+                // TODO: read / upload / parse, then close stream
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +66,10 @@ class PatternsFragment : Fragment() {
                 R.color.pink_secondary
             )
         )
+
+        binding.fabAdd.setOnClickListener {
+            pickFile.launch("*/*")
+        }
 
         val adapter = PatternsRecyclerViewAdapter(PatternCardContent.ITEMS);
         binding.searchBar.addTextChangedListener { text ->
