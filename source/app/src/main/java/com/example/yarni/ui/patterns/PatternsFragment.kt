@@ -3,7 +3,6 @@ package com.example.yarni.ui.patterns
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +24,6 @@ import com.example.yarni.databinding.FragmentPatternsListBinding
 import com.example.yarni.ui.patterns.data.PatternCardContent
 import com.example.yarni.ui.patterns.data.PatternsViewModel
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 
 class PatternsFragment : Fragment() {
 
@@ -85,8 +83,6 @@ class PatternsFragment : Fragment() {
             pickFile.launch("*/*")
         }
 
-        Log.d("Toto", LocalDateTime.now().toString())
-
         val adapter = PatternsRecyclerViewAdapter(PatternCardContent.ITEMS) { item ->
             val bundle = Bundle().apply {
                 putString("id", item.id)
@@ -94,7 +90,6 @@ class PatternsFragment : Fragment() {
                 putString("date", item.date.toString())
                 putString("fileName", item.fileName)
                 putInt("fileSize", item.fileSize)
-                putIntegerArrayList("data", item.data)
             }
             findNavController().navigate(R.id.action_nav_patterns_to_nav_pattern, bundle)
         }
@@ -146,8 +141,7 @@ class PatternsFragment : Fragment() {
                         title = p.name,
                         date = p.date,
                         fileName = p.filename,
-                        fileSize = p.size,
-                        data = p.data
+                        fileSize = p.size
                     )
                 }
 
