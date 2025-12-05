@@ -10,6 +10,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 
 class HomeFragment : Fragment() {
 
@@ -31,7 +32,10 @@ class HomeFragment : Fragment() {
                 // HomeScreen Composable을 호출하면서 관찰한 데이터를 파라미터로 전달합니다.
                 HomeScreen(
                     chartSegments = chartData,
-                    tips = tips
+                    tips = tips,
+                    onNavigate = { actionId ->
+                        findNavController().navigate(actionId)
+                    }
                 )
             }
         }
