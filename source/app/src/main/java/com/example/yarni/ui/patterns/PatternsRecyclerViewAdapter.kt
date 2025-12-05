@@ -1,24 +1,21 @@
 package com.example.yarni.ui.patterns
 
-import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.yarni.R
 import com.example.yarni.databinding.PatternsCardBinding
 import com.example.yarni.ui.patterns.data.PatternCardContent
 import com.example.yarni.ui.patterns.data.PatternCardContent.PatternCardItem
 import java.time.format.DateTimeFormatter
-import kotlin.random.Random
 
 /**
  * [RecyclerView.Adapter] that can display a [PatternCardItem].
  */
 class PatternsRecyclerViewAdapter(
-    private val values: List<PatternCardItem>
+    private val values: List<PatternCardItem>,
+    private val onItemClick: (PatternCardItem) -> Unit
 ) : RecyclerView.Adapter<PatternsRecyclerViewAdapter.ViewHolder>() {
     private var visibleValues: List<PatternCardItem> = values
 
@@ -35,7 +32,12 @@ class PatternsRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if (position >= visibleValues.size) {
+            return
+        }
+
         val item = visibleValues[position]
+        holder.itemView.setOnClickListener { onItemClick(item) }
         holder.titleView.text = item.title
         holder.dateView.text = item.date.format(DateTimeFormatter.ofPattern("MMM dd.yyyy"))
 
@@ -60,6 +62,18 @@ class PatternsRecyclerViewAdapter(
     }
 
     override fun getItemCount(): Int = values.size
+
+    fun updateTitle(content: PatternCardContent, itemId: String, newTitle: String) {
+        content.updateTitle(itemId, newTitle)
+        visibleValues = content.ITEMS
+        notifyDataSetChanged()
+    }
+
+    fun removeItem(content: PatternCardContent, itemId: String) {
+        content.removeItem(itemId)
+        visibleValues = content.ITEMS
+        notifyDataSetChanged()
+    }
 
     inner class ViewHolder(binding: PatternsCardBinding) :
         RecyclerView.ViewHolder(binding.root) {

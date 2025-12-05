@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,6 +42,11 @@ class PatternsFragment : Fragment() {
             }
         }
 
+    private fun refresh() {
+        PatternCardContent.loadPatterns()
+        binding.swipeRefresh.isRefreshing = false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -71,7 +77,33 @@ class PatternsFragment : Fragment() {
             pickFile.launch("*/*")
         }
 
-        val adapter = PatternsRecyclerViewAdapter(PatternCardContent.ITEMS);
+        val adapter = PatternsRecyclerViewAdapter(PatternCardContent.ITEMS) { item ->
+            val bundle = Bundle().apply {
+                putString("id", item.id)
+                putString("title", item.title)
+                putString("date", item.date.toString())
+                putString("fileName", item.fileName)
+                putInt("fileSize", item.fileSize)
+            }
+            findNavController().navigate(R.id.action_nav_patterns_to_nav_pattern, bundle)
+        }
+        setFragmentResultListener("titleChanged") { _, result ->
+            val itemId = result.getString("id")
+            val newTitle = result.getString("newTitle")
+            if (itemId != null && newTitle != null) {
+                adapter.updateTitle(PatternCardContent, itemId, newTitle)
+            }
+        }
+        setFragmentResultListener("itemDeleted") { _, result ->
+            val itemId = result.getString("id")
+            if (itemId != null) {
+                adapter.removeItem(PatternCardContent, itemId)
+            }
+        }
+        binding.swipeRefresh.setOnRefreshListener {
+            refresh()
+            adapter.notifyDataSetChanged()
+        }
         binding.searchBar.addTextChangedListener { text ->
             PatternCardContent.search(text?.toString().orEmpty())
             adapter.notifyDataSetChanged()

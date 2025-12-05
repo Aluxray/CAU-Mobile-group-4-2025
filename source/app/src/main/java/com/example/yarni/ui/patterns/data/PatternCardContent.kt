@@ -40,12 +40,7 @@ object PatternCardContent {
     private val COUNT = 25
 
     init {
-        // TODO: call REST API for items and delete COUNT
-        // Add some sample items.
-        for (i in 1..COUNT) {
-            addItem(createPlaceholderItem(i))
-        }
-        sortByDate(_sortAscending)
+        loadPatterns()
     }
 
     private fun addItem(item: PatternCardItem) {
@@ -53,12 +48,22 @@ object PatternCardContent {
         ITEMS.add(item)
     }
 
-    private fun createPlaceholderItem(position: Int): PatternCardItem {
-        return PatternCardItem(
-            position.toString(),
-            "Item $position",
-            LocalDateTime.parse("2020-12-10T12:00:${if (position < 10) "0$position" else position}")
-        )
+    fun loadPatterns() {
+        _ITEMS.clear()
+        ITEMS.clear()
+        // TODO: call REST API for items and delete COUNT
+        // Add some sample items.
+        for (i in 1..COUNT) {
+            addItem(PatternCardItem(
+                i.toString(),
+                "Item $i",
+                LocalDateTime.parse("2020-12-10T12:00:${if (i < 10) "0$i" else i}"),
+                "item_$i.pdf",
+                12345
+                )
+            )
+        }
+        sortByDate(_sortAscending)
     }
 
     fun search(query: String) {
@@ -84,13 +89,37 @@ object PatternCardContent {
         _sortAscending = ascending
     }
 
+    fun updateTitle(itemId: String, newTitle: String) {
+        val index1 = _ITEMS.indexOfFirst { item -> item.id == itemId }
+        val index2 = ITEMS.indexOfFirst { item -> item.id == itemId }
+        if (index1 >= 0) {
+            _ITEMS.elementAt(index1).title = newTitle
+        }
+        if (index2 >= 0) {
+            ITEMS.elementAt(index2).title = newTitle
+        }
+    }
+
+    fun removeItem(itemId: String) {
+        val index1 = _ITEMS.indexOfFirst { item -> item.id == itemId }
+        val index2 = ITEMS.indexOfFirst { item -> item.id == itemId }
+        if (index1 >= 0) {
+            _ITEMS.removeAt(index1)
+        }
+        if (index2 >= 0) {
+            ITEMS.removeAt(index2)
+        }
+    }
+
     /**
      * Class for pattern cards data handling.
      */
     data class PatternCardItem(
         val id: String,
-        val title: String,
-        val date: LocalDateTime
+        var title: String,
+        val date: LocalDateTime,
+        val fileName: String,
+        val fileSize: Int
     ) {
         val colorIndex: Int = Random.nextInt(COLORS.size)
 

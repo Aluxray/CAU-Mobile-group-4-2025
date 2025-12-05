@@ -64,9 +64,40 @@
         android:id="@+id/nav_patterns"
         android:name="com.example.yarni.ui.patterns.PatternsFragment"
         android:label="@string/patterns"
-        tools:layout="@layout/fragment_patterns" >
+        tools:layout="@layout/fragment_patterns_list" >
         <action
             android:id="@+id/action_nav_patterns_to_nav_home"
             app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_nav_patterns_to_nav_pattern"
+            app:destination="@id/nav_pattern" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_pattern"
+        android:name="com.example.yarni.ui.patterns.subpage.PatternFragment"
+        android:label="@string/pattern"
+        tools:layout="@layout/fragment_pattern" >
+        <argument
+            android:name="id"
+            app:argType="string" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="date"
+            app:argType="string" />
+        <argument
+            android:name="fileName"
+            app:argType="string" />
+        <argument
+            android:name="fileSize"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_nav_pattern_to_nav_home"
+            app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_nav_pattern_to_nav_patterns"
+            app:destination="@id/nav_patterns" />
     </fragment>
 </navigation>
