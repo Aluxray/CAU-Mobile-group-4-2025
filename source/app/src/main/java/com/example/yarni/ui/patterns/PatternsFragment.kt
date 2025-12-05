@@ -3,6 +3,7 @@ package com.example.yarni.ui.patterns
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,16 +19,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.yarni.R
+import com.example.yarni.data.firebase.PatternFirebaseDataSource
+import com.example.yarni.data.repository.PatternRepositoryImpl
 import com.example.yarni.databinding.FragmentPatternsListBinding
 import com.example.yarni.ui.patterns.data.PatternCardContent
-import com.example.yarni.data.repository.PatternRepositoryImpl
-import com.example.yarni.data.firebase.PatternFirebaseDataSource
 import com.example.yarni.ui.patterns.data.PatternsViewModel
-import com.google.firebase.Timestamp
 import kotlinx.coroutines.launch
-import java.time.Instant
-import java.time.ZoneId
-import java.util.Date
+import java.time.LocalDateTime
 
 class PatternsFragment : Fragment() {
 
@@ -48,7 +46,11 @@ class PatternsFragment : Fragment() {
             if (uri != null) {
                 val file = DocumentFile.fromSingleUri(requireContext(), uri)
                 val stream = requireContext().contentResolver.openInputStream(uri)
-                viewModel.addPattern(uri, fileName = file?.name?:"defaultName", fileSize = file?.length()?:0)
+                viewModel.addPattern(
+                    uri,
+                    fileName = file?.name ?: "defaultName",
+                    fileSize = file?.length() ?: 0
+                )
                 stream?.close()
             }
         }
@@ -83,6 +85,8 @@ class PatternsFragment : Fragment() {
             pickFile.launch("*/*")
         }
 
+        Log.d("Toto", LocalDateTime.now().toString())
+
         val adapter = PatternsRecyclerViewAdapter(PatternCardContent.ITEMS) { item ->
             val bundle = Bundle().apply {
                 putString("id", item.id)
@@ -90,6 +94,7 @@ class PatternsFragment : Fragment() {
                 putString("date", item.date.toString())
                 putString("fileName", item.fileName)
                 putInt("fileSize", item.fileSize)
+                putIntegerArrayList("data", item.data)
             }
             findNavController().navigate(R.id.action_nav_patterns_to_nav_pattern, bundle)
         }
@@ -141,7 +146,8 @@ class PatternsFragment : Fragment() {
                         title = p.name,
                         date = p.date,
                         fileName = p.filename,
-                        fileSize = p.size
+                        fileSize = p.size,
+                        data = p.data
                     )
                 }
 

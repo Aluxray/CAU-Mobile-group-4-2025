@@ -93,6 +93,9 @@
         <argument
             android:name="fileSize"
             app:argType="integer" />
+        <argument
+            android:name="data"
+            app:argType="integer[]" />
         <action
             android:id="@+id/action_nav_pattern_to_nav_home"
             app:destination="@id/nav_home" />

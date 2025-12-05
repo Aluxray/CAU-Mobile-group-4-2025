@@ -20,6 +20,7 @@ private const val TITLE = "title"
 private const val DATE = "date"
 private const val FILE_NAME = "fileName"
 private const val FILE_SIZE = "fileSize"
+private const val FILE_DATA = "data"
 
 class PatternFragment : Fragment() {
 
@@ -28,7 +29,8 @@ class PatternFragment : Fragment() {
         var title: String,
         val date: LocalDateTime,
         val fileName: String,
-        val fileSize: Int
+        val fileSize: Int,
+        val data: ArrayList<Int>
     )
 
     private var info: PatternInfo? = null
@@ -75,7 +77,8 @@ class PatternFragment : Fragment() {
                 title = it.getString(TITLE, "N/A"),
                 date = LocalDateTime.parse(it.getString(DATE, LocalDateTime.MIN.toString())),
                 fileName = it.getString(FILE_NAME, "N/A"),
-                fileSize = it.getInt(FILE_SIZE, -1)
+                fileSize = it.getInt(FILE_SIZE, -1),
+                data = it.getIntegerArrayList(FILE_DATA) ?: arrayListOf()
             )
         }
     }
@@ -158,7 +161,7 @@ class PatternFragment : Fragment() {
 
         binding.downloadButton.setOnClickListener {
             Toast.makeText(requireContext(), "Download started...", Toast.LENGTH_SHORT).show()
-            val toDownload = ByteArray(info!!.fileSize)
+            val toDownload = info!!.data.map { it.toByte() }.toByteArray()
             val downloadedFile = File(context?.filesDir, info!!.fileName)
             downloadedFile.writeBytes(toDownload)
             Toast.makeText(requireContext(), "Download done!", Toast.LENGTH_SHORT).show()
@@ -188,7 +191,8 @@ class PatternFragment : Fragment() {
             title: String,
             date: String,
             fileName: String,
-            fileSize: Int
+            fileSize: Int,
+            data: ArrayList<Int>
         ) =
             PatternFragment().apply {
                 arguments = Bundle().apply {
@@ -197,6 +201,7 @@ class PatternFragment : Fragment() {
                     putString(DATE, date)
                     putString(FILE_NAME, fileName)
                     putInt(FILE_SIZE, fileSize)
+                    putIntegerArrayList(FILE_DATA, data)
                 }
             }
     }

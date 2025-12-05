@@ -63,7 +63,8 @@ object PatternCardContent {
         var title: String,
         val date: Timestamp,
         val fileName: String,
-        val fileSize: Int
+        val fileSize: Int,
+        val data: ArrayList<Int>
     ) {
         val colorIndex: Int = Random.nextInt(COLORS.size)
     }

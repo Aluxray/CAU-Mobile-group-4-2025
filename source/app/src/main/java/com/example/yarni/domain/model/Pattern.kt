@@ -7,5 +7,6 @@ data class Pattern(
     val date: Timestamp = Timestamp.now(),
     val filename: String = "",
     val name: String = "",
-    val size: Int = 0
+    val size: Int = 0,
+    val data: ArrayList<Int> = arrayListOf()
 )
