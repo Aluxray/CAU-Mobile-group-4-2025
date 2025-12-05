@@ -1,17 +1,44 @@
 package com.example.yarni.ui.home
 
+import android.content.Intent
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Apps
+import androidx.compose.material.icons.filled.Folder
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +52,11 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.yarni.R
+import com.example.yarni.ui.patterns.PatternsFragment
 
 // --- Data Models ---
 data class ChartSegment(val weight: Float, val color: Color)
@@ -46,12 +77,14 @@ val ChartColors = listOf(
 @Composable
 fun HomeScreen(
     chartSegments: List<ChartSegment>,
-    tips: List<Tip>
+    tips: List<Tip>,
+    onNavigate: (Int) -> Unit
 ) {
     Scaffold(
         bottomBar = {
             BottomNavBar(
-                onFabClick = { /* TODO: add action */ }
+                onFabClick = { /* TODO: add action */ },
+                onNavigate = onNavigate
             )
         }
     ) { innerPadding ->
@@ -130,7 +163,7 @@ fun StorageChartSection(segments: List<ChartSegment>, totalSize: String) {
         }
         Spacer(Modifier.height(8.dp))
         Text(
-            text = "Stroge details >",
+            text = "Storage details >",
             style = MaterialTheme.typography.bodySmall.copy(
                 textDecoration = TextDecoration.Underline,
                 color = Color.Gray
@@ -247,7 +280,8 @@ fun PagerIndicator(pagerState: PagerState) {
 // --- Custom Bottom Navigation + Center FAB ---
 @Composable
 fun BottomNavBar(
-    onFabClick: () -> Unit
+    onFabClick: () -> Unit,
+    onNavigate: (Int) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -271,14 +305,20 @@ fun BottomNavBar(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                NavBarItem(icon = Icons.Default.Home, description = "Home", isSelected = true)
-                NavBarItem(icon = Icons.Default.Folder, description = "Library")
+                NavBarItem(
+                    icon = Icons.Default.Home,
+                    description = "Home",
+                    isSelected = true,
+                    onClick = { })
+                NavBarItem(icon = Icons.Default.Folder, description = "Patterns", onClick = {
+                    onNavigate(R.id.action_nav_home_to_nav_patterns)
+                })
 
                 // 가운데 + 버튼 자리 확보
                 Spacer(Modifier.width(56.dp))
 
-                NavBarItem(icon = Icons.Default.Notifications, description = "Alarm")
-                NavBarItem(icon = Icons.Default.Settings, description = "Settings")
+                NavBarItem(icon = Icons.Default.Notifications, description = "Alarm", onClick = { })
+                NavBarItem(icon = Icons.Default.Settings, description = "Settings", onClick = { })
             }
         }
 
@@ -306,9 +346,10 @@ fun BottomNavBar(
 private fun RowScope.NavBarItem(
     icon: ImageVector,
     description: String,
+    onClick: () -> Unit,
     isSelected: Boolean = false
 ) {
-    IconButton(onClick = { /* TODO: Navigation */ }) {
+    IconButton(onClick = onClick) {
         Icon(
             imageVector = icon,
             contentDescription = description,
@@ -333,6 +374,6 @@ fun DefaultPreview() {
         Tip("Tip3", "한길긴뜨기")
     )
     MaterialTheme {
-        HomeScreen(chartSegments = chartData, tips = crochetTips)
+        HomeScreen(chartSegments = chartData, tips = crochetTips, onNavigate = { _ -> -1})
     }
 }
