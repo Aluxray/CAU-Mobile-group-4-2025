@@ -64,4 +64,5 @@
     <string name="download">Download</string>
     <string name="delete">Delete</string>
     <string name="file_size_formatted">%1$.2f%2$s</string>
+    <string name="action_logout">Logout</string>
 </resources>
