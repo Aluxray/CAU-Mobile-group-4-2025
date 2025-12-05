@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
+import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -22,9 +23,11 @@ import com.example.yarni.ui.patterns.data.PatternCardContent
 import com.example.yarni.data.repository.PatternRepositoryImpl
 import com.example.yarni.data.firebase.PatternFirebaseDataSource
 import com.example.yarni.ui.patterns.data.PatternsViewModel
+import com.google.firebase.Timestamp
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
+import java.util.Date
 
 class PatternsFragment : Fragment() {
 
@@ -43,11 +46,13 @@ class PatternsFragment : Fragment() {
     private val pickFile =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             if (uri != null) {
+                val file = DocumentFile.fromSingleUri(requireContext(), uri)
                 val stream = requireContext().contentResolver.openInputStream(uri)
-                // TODO: upload fichier + créer un Pattern en Firestore
+                viewModel.addPattern(uri, fileName = file?.name?:"defaultName", fileSize = file?.length()?:0)
                 stream?.close()
             }
         }
+
 
     private fun refresh() {
         viewModel.loadPatterns()  // On recharge Firestore
@@ -134,9 +139,7 @@ class PatternsFragment : Fragment() {
                     PatternCardContent.PatternCardItem(
                         id = p.id,
                         title = p.name,
-                        date = Instant.ofEpochMilli(p.date)
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDateTime(),
+                        date = p.date,
                         fileName = p.filename,
                         fileSize = p.size
                     )

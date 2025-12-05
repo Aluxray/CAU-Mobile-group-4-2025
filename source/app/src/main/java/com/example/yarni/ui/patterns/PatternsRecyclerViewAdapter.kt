@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.yarni.databinding.PatternsCardBinding
 import com.example.yarni.ui.patterns.data.PatternCardContent
 import com.example.yarni.ui.patterns.data.PatternCardContent.PatternCardItem
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 /**
  * [RecyclerView.Adapter] that can display a [PatternCardItem].
@@ -39,8 +41,12 @@ class PatternsRecyclerViewAdapter(
         val item = visibleValues[position]
         holder.itemView.setOnClickListener { onItemClick(item) }
         holder.titleView.text = item.title
-        holder.dateView.text = item.date.format(DateTimeFormatter.ofPattern("MMM dd.yyyy"))
-
+        val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.getDefault())
+        holder.dateView.text = item.date.toDate()
+            .toInstant()
+            .atZone(ZoneId.systemDefault())
+            .toLocalDateTime()
+            .format(formatter)
         // Set color of card
         val color = PatternCardContent.COLORS[item.colorIndex]
         val deepColor = PatternCardContent.DEEP_COLORS[item.colorIndex]

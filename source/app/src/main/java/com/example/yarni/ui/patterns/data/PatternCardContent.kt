@@ -1,6 +1,7 @@
 package com.example.yarni.ui.patterns.data
 
 import com.example.yarni.R
+import com.google.firebase.Timestamp
 import java.time.LocalDateTime
 import kotlin.random.Random
 
@@ -60,7 +61,7 @@ object PatternCardContent {
     data class PatternCardItem(
         val id: String,
         var title: String,
-        val date: LocalDateTime,
+        val date: Timestamp,
         val fileName: String,
         val fileSize: Int
     ) {

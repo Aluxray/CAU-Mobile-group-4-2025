@@ -1,5 +1,6 @@
 package com.example.yarni.data.repository
 
+import android.net.Uri
 import com.example.yarni.data.firebase.PatternFirebaseDataSource
 import com.example.yarni.data.model.PatternDto
 import com.example.yarni.domain.model.Pattern
@@ -10,21 +11,15 @@ class PatternRepositoryImpl(
     private val source: PatternFirebaseDataSource
 ) : PatternRepository {
 
-    override suspend fun addPattern(pattern: Pattern) {
-        val dto = PatternDto(
-            date = Timestamp(pattern.date / 1000, 0),
-            filename = pattern.filename,
-            name = pattern.name,
-            size = pattern.size
-        )
-        source.addPattern(pattern.id, dto)
+    override suspend fun addPattern(uri: Uri, fileName: String, fileSize: Long) {
+        source.addPattern(uri, fileName, fileSize)
     }
 
     override suspend fun getPattern(id: String): Pattern? {
         val dto = source.getPattern(id) ?: return null
         return Pattern(
             id = id,
-            date = (dto.date?.seconds ?: 0) * 1000,
+            date = dto.date ?: Timestamp.now(),
             filename = dto.filename,
             name = dto.name,
             size = dto.size
@@ -43,7 +38,7 @@ class PatternRepositoryImpl(
         return source.getPatterns().map { (id, dto) ->
             Pattern(
                 id = id,
-                date = (dto.date?.seconds ?: 0) * 1000,
+                date = dto.date ?: Timestamp.now(),
                 filename = dto.filename,
                 name = dto.name,
                 size = dto.size

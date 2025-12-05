@@ -1,5 +1,6 @@
 package com.example.yarni.data.firebase
 
+import android.net.Uri
 import com.example.yarni.data.model.PatternDto
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
@@ -10,8 +11,16 @@ class PatternFirebaseDataSource {
 
     private val collection = Firebase.firestore.collection("patterns")
 
-    suspend fun addPattern(id: String, dto: PatternDto) {
-        collection.document(id).set(dto).await()
+    suspend fun addPattern(uri: Uri, fileName: String, fileSize: Long) {
+
+        val document = hashMapOf(
+            "name" to fileName.substringBeforeLast("."),  // titre par défaut
+            "filename" to fileName,
+            "size" to fileSize,
+            "date" to Timestamp.now(),
+        )
+
+        collection.add(document).await()
     }
 
     suspend fun getPattern(id: String): PatternDto? {

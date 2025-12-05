@@ -1,5 +1,6 @@
 package com.example.yarni.ui.patterns.data
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -20,9 +21,9 @@ class PatternsViewModel(
         _patterns.value = repo.getPatterns()
     }
 
-    fun addPattern(pattern: Pattern) = viewModelScope.launch {
+    fun addPattern(uri: Uri, fileName: String, fileSize: Long) {
         viewModelScope.launch {
-            repo.addPattern(pattern)
+            repo.addPattern(uri, fileName, fileSize)
             loadPatterns()
         }
     }
