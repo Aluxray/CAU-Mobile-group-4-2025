@@ -83,6 +83,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
     implementation(platform("androidx.compose:compose-bom:2024.05.00")) // Compose BOM
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
