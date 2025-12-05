@@ -1,0 +1,78 @@
+package com.example.yarni.ui.patterns
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
+import com.example.yarni.databinding.PatternsCardBinding
+import com.example.yarni.ui.patterns.data.PatternCardContent
+import com.example.yarni.ui.patterns.data.PatternCardContent.PatternCardItem
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Locale
+
+/**
+ * [RecyclerView.Adapter] that can display a [PatternCardItem].
+ */
+class PatternsRecyclerViewAdapter(
+    private val values: List<PatternCardItem>,
+    private val onItemClick: (PatternCardItem) -> Unit
+) : RecyclerView.Adapter<PatternsRecyclerViewAdapter.ViewHolder>() {
+    private var visibleValues: List<PatternCardItem> = values
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+
+        return ViewHolder(
+            PatternsCardBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
+
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if (position >= visibleValues.size) {
+            return
+        }
+
+        val item = visibleValues[position]
+        holder.itemView.setOnClickListener { onItemClick(item) }
+        holder.titleView.text = item.title
+        val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.getDefault())
+        holder.dateView.text = item.date.toDate()
+            .toInstant()
+            .atZone(ZoneId.systemDefault())
+            .toLocalDateTime()
+            .format(formatter)
+        // Set color of card
+        val color = PatternCardContent.COLORS[item.colorIndex]
+        val deepColor = PatternCardContent.DEEP_COLORS[item.colorIndex]
+        holder.card.setCardBackgroundColor(ContextCompat.getColor(holder.card.context, color))
+        holder.folderIcon.setColorFilter(
+            ContextCompat.getColor(
+                holder.folderIcon.context,
+                deepColor
+            )
+        )
+        holder.titleView.setTextColor(ContextCompat.getColor(holder.titleView.context, deepColor))
+        holder.dateView.setTextColor(ContextCompat.getColor(holder.dateView.context, deepColor))
+    }
+
+    override fun getItemCount(): Int = values.size
+
+    inner class ViewHolder(binding: PatternsCardBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        val titleView: TextView = binding.textTitle
+        val dateView: TextView = binding.textDate
+        val card = binding.card
+        val folderIcon = binding.folderIcon
+
+        override fun toString(): String {
+            return super.toString() + " '" + titleView.text + "'"
+        }
+    }
+
+}

@@ -11,8 +11,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints">
+        android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,13 +41,13 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
 
-                <!-- Email -->
+                <!-- email -->
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/usernameLayout"
+                    android:id="@+id/emailLayout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/create_email">
+                    android:hint="@string/email">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/email"
@@ -68,7 +68,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:hint="@string/create_password"
+                    android:hint="@string/prompt_password"
                     app:endIconMode="password_toggle">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -79,16 +79,8 @@
                         android:selectAllOnFocus="true"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/username" />
+                        app:layout_constraintTop_toBottomOf="@+id/email" />
                 </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="4dp"
-                    android:textColor="#898989"
-                    android:textSize="11sp"
-                    android:text="@string/create_password_label" />
 
                 <!-- Confirm password -->
                 <com.google.android.material.textfield.TextInputLayout
@@ -97,7 +89,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:hint="@string/create_confirm_password"
+                    android:hint="@string/prompt_confirm_password"
                     app:endIconMode="password_toggle">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -113,26 +105,12 @@
                         app:layout_constraintTop_toBottomOf="@+id/password" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <ProgressBar
-                    android:id="@+id/loading"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="24dp"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/confirm_password"
-                    app:layout_constraintStart_toStartOf="@+id/confirm_password"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.3" />
-
                 <!-- Create account button -->
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/create_account"
                     android:layout_width="match_parent"
                     android:layout_height="46dp"
                     android:layout_marginTop="24dp"
-                    android:layout_weight="1"
                     android:background="@drawable/rounded_button"
                     android:backgroundTint="?attr/colorPrimary"
                     android:enabled="true"
@@ -147,6 +125,22 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/password"
                     app:layout_constraintVertical_bias="0.2"/>
+
+                <ProgressBar
+                    android:id="@+id/loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="64dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginBottom="64dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/password"
+                    app:layout_constraintStart_toStartOf="@+id/password"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.3" />
 
                 <!-- Small text -->
                 <TextView
@@ -168,7 +162,6 @@
                     android:layout_height="46dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="16dp"
-                    android:layout_weight="1"
                     android:background="@drawable/rounded_button"
                     android:backgroundTint="?attr/colorSecondary"
                     android:drawableEnd="@drawable/arrow_right"
@@ -199,36 +192,14 @@
                     android:textSize="12sp" />
 
                 <!-- Social Icons -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <ImageButton
+                    android:id="@+id/google_login"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
                     android:layout_marginVertical="16dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <ImageButton
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:layout_marginEnd="24dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/kakao_login"
-                        android:src="@drawable/kakao_talk_icon" />
-
-                    <ImageButton
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:layout_marginEnd="24dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/naver_login"
-                        android:src="@drawable/naver_icon" />
-
-                    <ImageButton
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/google_login"
-                        android:src="@drawable/google_icon" />
-                </LinearLayout>
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/google_login"
+                    android:src="@drawable/google_icon" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
