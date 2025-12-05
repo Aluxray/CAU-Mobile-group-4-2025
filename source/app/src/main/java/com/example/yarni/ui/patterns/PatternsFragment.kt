@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
@@ -43,13 +44,12 @@ class PatternsFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             if (uri != null) {
                 val file = DocumentFile.fromSingleUri(requireContext(), uri)
-                val stream = requireContext().contentResolver.openInputStream(uri)
                 viewModel.addPattern(
                     uri,
                     fileName = file?.name ?: "defaultName",
                     fileSize = file?.length() ?: 0
                 )
-                stream?.close()
+                Toast.makeText(requireContext(), "File added successfully!", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -87,7 +87,7 @@ class PatternsFragment : Fragment() {
             val bundle = Bundle().apply {
                 putString("id", item.id)
                 putString("title", item.title)
-                putString("date", item.date.toString())
+                putString("date", item.date.toDate().time.toString())
                 putString("fileName", item.fileName)
                 putInt("fileSize", item.fileSize)
             }

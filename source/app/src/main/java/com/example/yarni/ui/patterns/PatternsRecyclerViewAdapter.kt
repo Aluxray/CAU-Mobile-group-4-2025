@@ -57,12 +57,6 @@ class PatternsRecyclerViewAdapter(
                 deepColor
             )
         )
-        holder.moreButton.setColorFilter(
-            ContextCompat.getColor(
-                holder.moreButton.context,
-                deepColor
-            )
-        )
         holder.titleView.setTextColor(ContextCompat.getColor(holder.titleView.context, deepColor))
         holder.dateView.setTextColor(ContextCompat.getColor(holder.dateView.context, deepColor))
     }
@@ -75,7 +69,6 @@ class PatternsRecyclerViewAdapter(
         val dateView: TextView = binding.textDate
         val card = binding.card
         val folderIcon = binding.folderIcon
-        val moreButton = binding.moreButton
 
         override fun toString(): String {
             return super.toString() + " '" + titleView.text + "'"

@@ -30,19 +30,26 @@
                     android:id="@+id/patternTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:textAlignment="center"
                     android:text="@string/placeholder"
                     android:textColor="@color/black"
                     android:textSize="24sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:ellipsize="end"/>
 
                 <EditText
                     android:id="@+id/patternTitleEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="10"
                     android:visibility="gone"
                     android:textColor="@color/black"
                     android:textSize="24sp"
                     android:textStyle="bold"
+                    android:textAlignment="center"
                     android:maxLines="1"
                     android:imeOptions="actionDone"
                     android:singleLine="true" />
@@ -51,7 +58,7 @@
                     android:id="@+id/renameButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/edit_name"
                     android:src="@drawable/edit_icon" />
@@ -60,8 +67,8 @@
                     android:id="@+id/saveButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:visibility="gone"
-                    android:layout_marginStart="8dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/edit_name"
                     android:src="@drawable/save_icon" />

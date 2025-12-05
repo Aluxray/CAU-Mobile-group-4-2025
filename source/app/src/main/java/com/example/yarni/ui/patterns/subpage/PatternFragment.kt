@@ -1,16 +1,23 @@
 package com.example.yarni.ui.patterns.subpage
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.yarni.R
+import com.example.yarni.data.firebase.PatternFirebaseDataSource
+import com.example.yarni.data.repository.PatternRepositoryImpl
 import com.example.yarni.databinding.FragmentPatternBinding
+import com.example.yarni.ui.patterns.data.PatternsViewModel
 import java.io.File
 import java.time.Instant
 import java.time.ZoneId
@@ -37,6 +44,25 @@ class PatternFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var isEditing = false
+
+    private val viewModel: PatternsViewModel by viewModels {
+        PatternsViewModel.Factory(
+            PatternRepositoryImpl(PatternFirebaseDataSource())
+        )
+    }
+
+    private val pickFile =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            if (uri != null) {
+                val file = DocumentFile.fromSingleUri(requireContext(), uri)
+                viewModel.addPattern(
+                    uri,
+                    fileName = file?.name ?: "defaultName",
+                    fileSize = file?.length() ?: 0
+                )
+                Toast.makeText(requireContext(), "File added successfully!", Toast.LENGTH_SHORT).show()
+            }
+        }
 
     private fun saveTitle() {
         val newTitle = binding.patternTitleEdit.text.toString().trim()
@@ -92,6 +118,10 @@ class PatternFragment : Fragment() {
             Toast.makeText(requireContext(), "Error loading pattern", Toast.LENGTH_SHORT).show()
             findNavController().popBackStack()
             return null
+        }
+
+        binding.fabAdd.setOnClickListener {
+            pickFile.launch("*/*")
         }
 
         binding.navHome.setOnClickListener {

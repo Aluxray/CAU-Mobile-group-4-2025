@@ -26,19 +26,6 @@
                 android:contentDescription="@string/folder_icon"
                 android:src="@drawable/folder_alt_icon"
                 app:tint="@color/black" />
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <ImageButton
-                android:id="@+id/more_button"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/more_options"
-                android:src="@drawable/more_icon" />
         </LinearLayout>
 
         <TextView
