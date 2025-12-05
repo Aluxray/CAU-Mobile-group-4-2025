@@ -12,7 +12,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.yarni.R
 import com.example.yarni.databinding.FragmentPatternBinding
 import java.io.File
-import java.time.LocalDateTime
+import java.time.Instant
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 private const val ID = "id"
@@ -26,25 +27,20 @@ class PatternFragment : Fragment() {
     private class PatternInfo(
         val id: String,
         var title: String,
-        val date: LocalDateTime,
+        val date: String,
         val fileName: String,
         val fileSize: Int
     )
 
     private var info: PatternInfo? = null
     private var _binding: FragmentPatternBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
-    // Text editing properties
     private var isEditing = false
 
     private fun saveTitle() {
         val newTitle = binding.patternTitleEdit.text.toString().trim()
         if (newTitle.isNotEmpty()) {
-            // Notify previous fragment with new title
             val result = Bundle().apply {
                 putString("id", info?.id)
                 putString("newTitle", newTitle)
@@ -56,11 +52,8 @@ class PatternFragment : Fragment() {
             binding.patternTitle.text = info?.title
         }
 
-        // Hide EditText, show TextView
         binding.patternTitleEdit.visibility = View.GONE
         binding.patternTitle.visibility = View.VISIBLE
-
-        // Hide Save button, show Rename button
         binding.saveButton.visibility = View.GONE
         binding.renameButton.visibility = View.VISIBLE
 
@@ -70,10 +63,19 @@ class PatternFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
+
+            val dateMillis = it.getString(DATE, "0")!!.toLong()
+
+            val formattedDate =
+                Instant.ofEpochMilli(dateMillis)
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime()
+                    .format(DateTimeFormatter.ofPattern("MMM dd yyyy"))
+
             info = PatternInfo(
                 id = it.getString(ID, ""),
                 title = it.getString(TITLE, "N/A"),
-                date = LocalDateTime.parse(it.getString(DATE, LocalDateTime.MIN.toString())),
+                date = formattedDate,
                 fileName = it.getString(FILE_NAME, "N/A"),
                 fileSize = it.getInt(FILE_SIZE, -1)
             )
@@ -92,7 +94,6 @@ class PatternFragment : Fragment() {
             return null
         }
 
-        // Setup navigation buttons
         binding.navHome.setOnClickListener {
             findNavController().navigate(R.id.action_nav_pattern_to_nav_home)
         }
@@ -106,16 +107,16 @@ class PatternFragment : Fragment() {
             )
         )
 
-        // Setup text values
         binding.patternTitle.text = info!!.title
-        binding.patternDate.text = info!!.date.format(DateTimeFormatter.ofPattern("MMM dd.yyyy"))
+        binding.patternDate.text = info!!.date
         binding.patternFileName.text = info!!.fileName
         binding.patternFileType.text = info!!.fileName.substringAfterLast('.', "N/A").uppercase()
+
         val sizes = listOf(
-            Pair(0, "B"),
-            Pair(1000, "Kb"),
-            Pair(1000000, "Mb"),
-            Pair(1000000000, "Gb")
+            0 to "B",
+            1000 to "Kb",
+            1000000 to "Mb",
+            1000000000 to "Gb"
         )
         val sizeInfo = sizes.findLast { pair -> pair.first <= info!!.fileSize } ?: sizes.first()
         binding.patternFileSize.text = getString(
@@ -124,18 +125,13 @@ class PatternFragment : Fragment() {
             sizeInfo.second
         )
 
-        // Setup buttons behavior
-
-        // Rename button
         binding.renameButton.setOnClickListener {
             if (!isEditing) {
-                // Hide TextView, show EditText, set text
                 binding.patternTitle.visibility = View.GONE
                 binding.patternTitleEdit.visibility = View.VISIBLE
                 binding.patternTitleEdit.setText(binding.patternTitle.text)
                 binding.patternTitleEdit.requestFocus()
 
-                // Hide Rename button, show Save button
                 binding.renameButton.visibility = View.GONE
                 binding.saveButton.visibility = View.VISIBLE
 
@@ -143,18 +139,15 @@ class PatternFragment : Fragment() {
             }
         }
         binding.saveButton.setOnClickListener {
-            if (isEditing) {
-                saveTitle()
-            }
+            if (isEditing) saveTitle()
         }
+
         binding.patternTitleEdit.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 saveTitle()
                 true
-            } else
-                false
+            } else false
         }
-        // End of rename button
 
         binding.downloadButton.setOnClickListener {
             Toast.makeText(requireContext(), "Download started...", Toast.LENGTH_SHORT).show()
@@ -163,10 +156,9 @@ class PatternFragment : Fragment() {
             downloadedFile.writeBytes(toDownload)
             Toast.makeText(requireContext(), "Download done!", Toast.LENGTH_SHORT).show()
         }
+
         binding.deleteButton.setOnClickListener {
-            val result = Bundle().apply {
-                putString("id", info?.id)
-            }
+            val result = Bundle().apply { putString("id", info?.id) }
             parentFragmentManager.setFragmentResult("itemDeleted", result)
             Toast.makeText(requireContext(), "File deleted successfully!", Toast.LENGTH_LONG).show()
             findNavController().popBackStack()
@@ -175,29 +167,8 @@ class PatternFragment : Fragment() {
         return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @return A new instance of fragment PatternFragment.
-         */
-        @JvmStatic
-        fun newInstance(
-            id: String,
-            title: String,
-            date: String,
-            fileName: String,
-            fileSize: Int
-        ) =
-            PatternFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ID, id)
-                    putString(TITLE, title)
-                    putString(DATE, date)
-                    putString(FILE_NAME, fileName)
-                    putInt(FILE_SIZE, fileSize)
-                }
-            }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

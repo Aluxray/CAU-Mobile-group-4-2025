@@ -23,11 +23,8 @@ import com.example.yarni.ui.patterns.data.PatternCardContent
 import com.example.yarni.data.repository.PatternRepositoryImpl
 import com.example.yarni.data.firebase.PatternFirebaseDataSource
 import com.example.yarni.ui.patterns.data.PatternsViewModel
-import com.google.firebase.Timestamp
 import kotlinx.coroutines.launch
-import java.time.Instant
 import java.time.ZoneId
-import java.util.Date
 
 class PatternsFragment : Fragment() {
 
@@ -87,7 +84,7 @@ class PatternsFragment : Fragment() {
             val bundle = Bundle().apply {
                 putString("id", item.id)
                 putString("title", item.title)
-                putString("date", item.date.toString())
+                putString("date", item.date.toDate().time.toString())
                 putString("fileName", item.fileName)
                 putInt("fileSize", item.fileSize)
             }
