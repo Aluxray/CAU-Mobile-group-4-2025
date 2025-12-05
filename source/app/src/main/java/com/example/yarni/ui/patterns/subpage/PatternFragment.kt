@@ -158,14 +158,12 @@ class PatternFragment : Fragment() {
 
         binding.downloadButton.setOnClickListener {
             Toast.makeText(requireContext(), "Download started...", Toast.LENGTH_SHORT).show()
-            // TODO: Call backend to download file
-            val toDownload = ByteArray(0)
+            val toDownload = ByteArray(info!!.fileSize)
             val downloadedFile = File(context?.filesDir, info!!.fileName)
             downloadedFile.writeBytes(toDownload)
             Toast.makeText(requireContext(), "Download done!", Toast.LENGTH_SHORT).show()
         }
         binding.deleteButton.setOnClickListener {
-            // TODO: Call backend to delete file
             val result = Bundle().apply {
                 putString("id", info?.id)
             }
