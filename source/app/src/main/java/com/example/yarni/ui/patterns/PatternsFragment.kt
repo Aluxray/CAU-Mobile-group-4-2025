@@ -11,48 +11,53 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.yarni.R
 import com.example.yarni.databinding.FragmentPatternsListBinding
 import com.example.yarni.ui.patterns.data.PatternCardContent
+import com.example.yarni.data.repository.PatternRepositoryImpl
+import com.example.yarni.data.firebase.PatternFirebaseDataSource
+import com.example.yarni.ui.patterns.data.PatternsViewModel
+import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.ZoneId
 
-/**
- * A fragment representing a list of Items.
- */
 class PatternsFragment : Fragment() {
 
     private var columnCount = 2
-
     private var sortAscending = false
 
     private var _binding: FragmentPatternsListBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
+
+    private val viewModel: PatternsViewModel by viewModels {
+        PatternsViewModel.Factory(
+            PatternRepositoryImpl(PatternFirebaseDataSource())
+        )
+    }
 
     private val pickFile =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             if (uri != null) {
-                // Use contentResolver to read file
                 val stream = requireContext().contentResolver.openInputStream(uri)
-                // TODO: read / upload / parse, then close stream
+                // TODO: upload fichier + créer un Pattern en Firestore
+                stream?.close()
             }
         }
 
     private fun refresh() {
-        PatternCardContent.loadPatterns()
+        viewModel.loadPatterns()  // On recharge Firestore
         binding.swipeRefresh.isRefreshing = false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-        }
+        columnCount = arguments?.getInt(ARG_COLUMN_COUNT) ?: 2
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -62,15 +67,11 @@ class PatternsFragment : Fragment() {
     ): View {
         _binding = FragmentPatternsListBinding.inflate(inflater, container, false)
 
-        // Setup navigation buttons
         binding.navHome.setOnClickListener {
             findNavController().navigate(R.id.action_nav_patterns_to_nav_home)
         }
         binding.navFolder.setColorFilter(
-            ContextCompat.getColor(
-                binding.navFolder.context,
-                R.color.pink_secondary
-            )
+            ContextCompat.getColor(binding.navFolder.context, R.color.pink_secondary)
         )
 
         binding.fabAdd.setOnClickListener {
@@ -87,40 +88,66 @@ class PatternsFragment : Fragment() {
             }
             findNavController().navigate(R.id.action_nav_patterns_to_nav_pattern, bundle)
         }
+
         setFragmentResultListener("titleChanged") { _, result ->
             val itemId = result.getString("id")
             val newTitle = result.getString("newTitle")
             if (itemId != null && newTitle != null) {
-                adapter.updateTitle(PatternCardContent, itemId, newTitle)
+                viewModel.updatePattern(itemId, newTitle)
             }
         }
+
         setFragmentResultListener("itemDeleted") { _, result ->
             val itemId = result.getString("id")
             if (itemId != null) {
-                adapter.removeItem(PatternCardContent, itemId)
+                viewModel.deletePattern(itemId)
             }
         }
+
         binding.swipeRefresh.setOnRefreshListener {
             refresh()
             adapter.notifyDataSetChanged()
         }
+
         binding.searchBar.addTextChangedListener { text ->
             PatternCardContent.search(text?.toString().orEmpty())
             adapter.notifyDataSetChanged()
         }
+
         binding.sortButton.setOnClickListener {
             sortAscending = !sortAscending
             PatternCardContent.sortByDate(sortAscending)
-            // Rotate button to match sorting mode
             binding.sortButton.scaleY = if (sortAscending) -1f else 1f
             adapter.notifyDataSetChanged()
         }
-        binding.list.layoutManager = if (columnCount <= 1) {
-            LinearLayoutManager(context)
-        } else {
-            GridLayoutManager(context, columnCount)
-        }
+
+        binding.list.layoutManager =
+            if (columnCount <= 1) LinearLayoutManager(context)
+            else GridLayoutManager(context, columnCount)
+
         binding.list.adapter = adapter
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.patterns.collect { patternList ->
+
+                val items = patternList.map { p ->
+                    PatternCardContent.PatternCardItem(
+                        id = p.id,
+                        title = p.name,
+                        date = Instant.ofEpochMilli(p.date)
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDateTime(),
+                        fileName = p.filename,
+                        fileSize = p.size
+                    )
+                }
+
+                PatternCardContent.setItems(items)
+                adapter.notifyDataSetChanged()
+            }
+        }
+
+        viewModel.loadPatterns()
         return binding.root
     }
 
@@ -133,7 +160,6 @@ class PatternsFragment : Fragment() {
 
         const val ARG_COLUMN_COUNT = "column-count"
 
-        // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
             PatternsFragment().apply {

@@ -63,18 +63,6 @@ class PatternsRecyclerViewAdapter(
 
     override fun getItemCount(): Int = values.size
 
-    fun updateTitle(content: PatternCardContent, itemId: String, newTitle: String) {
-        content.updateTitle(itemId, newTitle)
-        visibleValues = content.ITEMS
-        notifyDataSetChanged()
-    }
-
-    fun removeItem(content: PatternCardContent, itemId: String) {
-        content.removeItem(itemId)
-        visibleValues = content.ITEMS
-        notifyDataSetChanged()
-    }
-
     inner class ViewHolder(binding: PatternsCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val titleView: TextView = binding.textTitle
