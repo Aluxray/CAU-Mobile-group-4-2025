@@ -73,7 +73,8 @@
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="24dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list"
@@ -81,7 +82,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_marginTop="24dp"
                 app:layoutManager="LinearLayoutManager"
                 tools:context=".ui.patterns.PatternsFragment" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
