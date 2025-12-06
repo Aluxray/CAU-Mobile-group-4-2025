@@ -318,7 +318,9 @@ fun BottomNavBar(
                 Spacer(Modifier.width(56.dp))
 
                 NavBarItem(icon = Icons.Default.Notifications, description = "Alarm", onClick = { })
-                NavBarItem(icon = Icons.Default.Settings, description = "Settings", onClick = { })
+                NavBarItem(icon = Icons.Default.Settings, description = "Settings", onClick = {
+                    onNavigate(R.id.action_nav_home_to_nav_settings)
+                })
             }
         }
 
