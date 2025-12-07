@@ -13,7 +13,9 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.yarni.databinding.ActivityMainBinding
 import com.example.yarni.ui.welcome.WelcomeFragment
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration

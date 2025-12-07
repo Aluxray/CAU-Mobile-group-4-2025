@@ -1,44 +1,18 @@
 package com.example.yarni.ui.home
 
-import android.content.Intent
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Apps
-import androidx.compose.material.icons.filled.Folder
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,18 +20,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.example.yarni.R
-import com.example.yarni.ui.patterns.PatternsFragment
-
+import com.example.yarni.domain.model.Pattern
+import com.google.firebase.Timestamp
+import java.text.SimpleDateFormat
+import java.util.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 // --- Data Models ---
 data class ChartSegment(val weight: Float, val color: Color)
 data class Tip(val title: String, val description: String)
@@ -78,32 +54,38 @@ val ChartColors = listOf(
 fun HomeScreen(
     chartSegments: List<ChartSegment>,
     tips: List<Tip>,
+    totalSize: String, // ViewModel로부터 받을 총 저장 공간
+    recentPatterns: List<Pattern>, // ViewModel로부터 받을 최근 패턴 목록
     onNavigate: (Int) -> Unit
 ) {
     Scaffold(
         bottomBar = {
             BottomNavBar(
-                onFabClick = { /* TODO: add action */ },
+                onFabClick = { /*TODO: FAB 클릭 이벤트 처리*/ },
                 onNavigate = onNavigate
             )
         }
     ) { innerPadding ->
+        val scrollState = rememberScrollState()
+
         Column(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
                 .background(YarniBackground)
+                .verticalScroll(scrollState)
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
             TopAppBarSection()
             Spacer(Modifier.height(32.dp))
-            StorageChartSection(segments = chartSegments, totalSize = "43.36 GB")
+            StorageChartSection(segments = chartSegments, totalSize = totalSize, onNavigate = onNavigate)
             Spacer(Modifier.height(32.dp))
-            RecentDesignsSection()
+            RecentPatternsSection(patterns = recentPatterns)
             Spacer(Modifier.height(32.dp))
             TipsForCrochetSection(tips = tips)
         }
     }
+
 }
 
 // --- UI Sections ---
@@ -130,9 +112,11 @@ fun TopAppBarSection() {
 }
 
 @Composable
-fun StorageChartSection(segments: List<ChartSegment>, totalSize: String) {
+fun StorageChartSection(segments: List<ChartSegment>, totalSize: String, onNavigate: (Int) -> Unit) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onNavigate(R.id.action_nav_home_to_nav_patterns) }, // 전체 클릭 가능 영역
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
@@ -141,7 +125,6 @@ fun StorageChartSection(segments: List<ChartSegment>, totalSize: String) {
         ) {
             Canvas(modifier = Modifier.matchParentSize()) {
                 if (segments.isEmpty()) return@Canvas
-
                 val strokeWidth = 35f
                 val gapAngle = 4f
                 val totalAngle = 360f - (segments.size * gapAngle)
@@ -173,14 +156,65 @@ fun StorageChartSection(segments: List<ChartSegment>, totalSize: String) {
 }
 
 @Composable
-fun RecentDesignsSection() {
+fun RecentPatternsSection(patterns: List<Pattern>) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
-            text = "Recent Designs",
+            text = "Recently Added",
             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
         )
         Spacer(Modifier.height(16.dp))
         Divider(color = Color.LightGray)
+
+        if (patterns.isEmpty()) {
+            Text(
+                text = "최근 추가된 파일이 없습니다.",
+                color = Color.Gray,
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+        } else {
+            Column {
+                patterns.forEach { pattern ->
+                    PatternRow(pattern)
+                    Divider(color = Color.LightGray.copy(alpha = 0.5f))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun PatternRow(pattern: Pattern) {
+    val dateFormat = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
+    val formattedDate = dateFormat.format(pattern.date.toDate())
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = pattern.name,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp,
+                maxLines = 1
+            )
+            Text(
+                text = "Last updated: $formattedDate",
+                color = Color.Gray,
+                fontSize = 12.sp
+            )
+        }
+        Icon(
+            imageVector = Icons.Default.Description, // 파일 모양 아이콘으로 변경
+            contentDescription = "File icon",
+            tint = YarniPink,
+            modifier = Modifier.size(24.dp)
+        )
     }
 }
 
@@ -228,7 +262,7 @@ fun TipCard(title: String, koreanText: String, pageNumber: String, modifier: Mod
         ) {
             Row(verticalAlignment = Alignment.Top) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_launcher_foreground), // TODO: 전구 아이콘으로 교체
+                    imageVector = Icons.Default.Lightbulb, // 전구 아이콘으로 변경
                     contentDescription = "Tip icon",
                     tint = Color.Gray,
                     modifier = Modifier.size(20.dp)
@@ -286,9 +320,8 @@ fun BottomNavBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(88.dp)   // FAB가 위로 살짝 튀어나오도록 여유 높이
+            .height(88.dp)
     ) {
-        // 하얀 둥근 탭바 배경
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
@@ -302,19 +335,11 @@ fun BottomNavBar(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 24.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.SpaceAround,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                NavBarItem(
-                    icon = Icons.Default.Home,
-                    description = "Home",
-                    isSelected = true,
-                    onClick = { })
-                NavBarItem(icon = Icons.Default.Folder, description = "Patterns", onClick = {
-                    onNavigate(R.id.action_nav_home_to_nav_patterns)
-                })
-
-                // 가운데 + 버튼 자리 확보
+                NavBarItem(icon = Icons.Default.Home, description = "Home", isSelected = true, onClick = {})
+                NavBarItem(icon = Icons.Default.Folder, description = "Patterns", onClick = { onNavigate(R.id.action_nav_home_to_nav_patterns) })
                 Spacer(Modifier.width(56.dp))
 
                 NavBarItem(icon = Icons.Default.Notifications, description = "Alarm", onClick = { })
@@ -323,8 +348,6 @@ fun BottomNavBar(
                 })
             }
         }
-
-        // 중앙 + FAB
         FloatingActionButton(
             onClick = onFabClick,
             containerColor = YarniPink,
@@ -333,13 +356,9 @@ fun BottomNavBar(
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .size(64.dp)
-                .offset(y = 8.dp) // 탭바에 반쯤 걸치도록 약간 아래로
+                .offset(y = 8.dp)
         ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Add",
-                modifier = Modifier.size(32.dp)
-            )
+            Icon(imageVector = Icons.Default.Add, contentDescription = "Add", modifier = Modifier.size(32.dp))
         }
     }
 }
@@ -361,9 +380,10 @@ private fun RowScope.NavBarItem(
 }
 
 // --- Preview ---
-@Preview(showBackground = true, widthDp = 360, heightDp = 740)
+@Preview(showBackground = true, widthDp = 360, heightDp = 800)
 @Composable
 fun DefaultPreview() {
+    val context = LocalContext.current
     val chartData = listOf(
         ChartSegment(0.35f, ChartColors[0]),
         ChartSegment(0.25f, ChartColors[1]),
@@ -375,7 +395,18 @@ fun DefaultPreview() {
         Tip("Tip2", "짧은뜨기"),
         Tip("Tip3", "한길긴뜨기")
     )
+    val recentPatterns = listOf(
+        Pattern(id = "1", name = "My First Scarf", date = Timestamp.now(), size = 12345),
+        Pattern(id = "2", name = "Amigurumi Bear", date = Timestamp.now(), size = 6789)
+    )
+
     MaterialTheme {
-        HomeScreen(chartSegments = chartData, tips = crochetTips, onNavigate = { _ -> -1})
+        HomeScreen(
+            chartSegments = chartData,
+            tips = crochetTips,
+            totalSize = "1.2 GB",
+            recentPatterns = recentPatterns,
+            onNavigate = { }
+        )
     }
 }
