@@ -341,8 +341,13 @@ fun BottomNavBar(
                 NavBarItem(icon = Icons.Default.Home, description = "Home", isSelected = true, onClick = {})
                 NavBarItem(icon = Icons.Default.Folder, description = "Patterns", onClick = { onNavigate(R.id.action_nav_home_to_nav_patterns) })
                 Spacer(Modifier.width(56.dp))
-                NavBarItem(icon = Icons.Default.Notifications, description = "Alarm", onClick = {})
-                NavBarItem(icon = Icons.Default.Settings, description = "Settings", onClick = {})
+
+                NavBarItem(icon = Icons.Default.Notifications, description = "Alarm", onClick = {
+                    onNavigate(R.id.action_nav_home_to_nav_tips)
+                })
+                NavBarItem(icon = Icons.Default.Settings, description = "Settings", onClick = {
+                    onNavigate(R.id.action_nav_home_to_nav_settings)
+                })
             }
         }
         FloatingActionButton(
