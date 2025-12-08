@@ -58,6 +58,12 @@
         <action
             android:id="@+id/action_nav_home_to_nav_patterns"
             app:destination="@id/nav_patterns" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_settings"
+            app:destination="@id/nav_settings" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_tips"
+            app:destination="@id/nav_tips" />
     </fragment>
 
     <fragment
@@ -71,6 +77,12 @@
         <action
             android:id="@+id/action_nav_patterns_to_nav_pattern"
             app:destination="@id/nav_pattern" />
+        <action
+            android:id="@+id/action_nav_patterns_to_nav_settings"
+            app:destination="@id/nav_settings" />
+        <action
+            android:id="@+id/action_nav_patterns_to_nav_tips"
+            app:destination="@id/nav_tips" />
     </fragment>
 
     <fragment
@@ -99,5 +111,31 @@
         <action
             android:id="@+id/action_nav_pattern_to_nav_patterns"
             app:destination="@id/nav_patterns" />
+        <action
+            android:id="@+id/action_nav_pattern_to_nav_settings"
+            app:destination="@id/nav_settings" />
+        <action
+            android:id="@+id/action_nav_pattern_to_nav_tips"
+            app:destination="@id/nav_tips" />
     </fragment>
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.example.yarni.ui.settings.SettingsFragment"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_nav_settings_to_nav_account"
+            app:destination="@id/nav_account" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_account"
+        android:name="com.example.yarni.ui.account.AccountFragment"
+        tools:layout="@layout/fragment_account" >
+        <action
+            android:id="@+id/action_nav_account_to_nav_welcome"
+            app:destination="@id/nav_welcome" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_tips"
+        android:name="com.example.yarni.ui.tips.TipsFragment"
+        tools:layout="@layout/fragment_tips" />
 </navigation>

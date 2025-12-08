@@ -13,7 +13,9 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.yarni.databinding.ActivityMainBinding
 import com.example.yarni.ui.welcome.WelcomeFragment
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -62,10 +64,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_settings -> {
-                true
-            }
-
             R.id.action_logout -> {
                 FirebaseAuth.getInstance().signOut()
                 startActivity(Intent(this, MainActivity::class.java))
