@@ -136,6 +136,12 @@ class PatternFragment : Fragment() {
                 R.color.pink_secondary
             )
         )
+        binding.navBell.setOnClickListener {
+            findNavController().navigate(R.id.action_nav_pattern_to_nav_tips)
+        }
+        binding.navSettings.setOnClickListener {
+            findNavController().navigate(R.id.action_nav_pattern_to_nav_settings)
+        }
 
         binding.patternTitle.text = info!!.title
         binding.patternDate.text = info!!.date

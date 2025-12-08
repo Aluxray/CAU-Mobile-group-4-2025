@@ -80,6 +80,9 @@
         <action
             android:id="@+id/action_nav_patterns_to_nav_settings"
             app:destination="@id/nav_settings" />
+        <action
+            android:id="@+id/action_nav_patterns_to_nav_tips"
+            app:destination="@id/nav_tips" />
     </fragment>
 
     <fragment
@@ -111,6 +114,9 @@
         <action
             android:id="@+id/action_nav_pattern_to_nav_settings"
             app:destination="@id/nav_settings" />
+        <action
+            android:id="@+id/action_nav_pattern_to_nav_tips"
+            app:destination="@id/nav_tips" />
     </fragment>
     <fragment
         android:id="@+id/nav_settings"
