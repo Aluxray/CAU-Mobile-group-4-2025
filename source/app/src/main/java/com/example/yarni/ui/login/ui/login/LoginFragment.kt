@@ -154,8 +154,6 @@ class LoginFragment : Fragment() {
     }
 
     private fun handleGoogleSignIn(result: GetCredentialResponse) {
-        val credential = result.credential
-
         when (val cred = result.credential) {
 
             is GoogleIdTokenCredential -> {
