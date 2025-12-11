@@ -11,6 +11,9 @@
         android:label="@string/welcome"
         tools:layout="@layout/fragment_welcome" >
         <action
+            android:id="@+id/action_nav_welcome_to_nav_home"
+            app:destination="@id/nav_home"/>
+        <action
             android:id="@+id/action_nav_welcome_to_nav_register"
             app:destination="@id/nav_register" />
         <action
@@ -26,9 +29,7 @@
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_nav_login_to_nav_home"
-            app:destination="@id/nav_home"
-            app:popUpTo="@id/nav_login"
-            app:popUpToInclusive="true" />
+            app:destination="@id/nav_home"/>
         <action
             android:id="@+id/action_nav_login_to_nav_register"
             app:destination="@id/nav_register" />
@@ -40,14 +41,10 @@
         tools:layout="@layout/fragment_register" >
         <action
             android:id="@+id/action_nav_register_to_nav_home"
-            app:destination="@id/nav_home"
-            app:popUpTo="@id/nav_login"
-            app:popUpToInclusive="true" />
+            app:destination="@id/nav_home"/>
         <action
             android:id="@+id/action_nav_register_to_nav_login"
-            app:destination="@id/nav_login"
-            app:popUpTo="@id/nav_login"
-            app:popUpToInclusive="true"/>
+            app:destination="@id/nav_login"/>
     </fragment>
 
     <fragment
@@ -80,6 +77,9 @@
         <action
             android:id="@+id/action_nav_patterns_to_nav_settings"
             app:destination="@id/nav_settings" />
+        <action
+            android:id="@+id/action_nav_patterns_to_nav_tips"
+            app:destination="@id/nav_tips" />
     </fragment>
 
     <fragment
@@ -111,6 +111,9 @@
         <action
             android:id="@+id/action_nav_pattern_to_nav_settings"
             app:destination="@id/nav_settings" />
+        <action
+            android:id="@+id/action_nav_pattern_to_nav_tips"
+            app:destination="@id/nav_tips" />
     </fragment>
     <fragment
         android:id="@+id/nav_settings"

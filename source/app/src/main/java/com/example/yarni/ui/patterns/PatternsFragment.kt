@@ -78,9 +78,14 @@ class PatternsFragment : Fragment() {
         binding.navFolder.setColorFilter(
             ContextCompat.getColor(binding.navFolder.context, R.color.pink_secondary)
         )
-
         binding.fabAdd.setOnClickListener {
             pickFile.launch("*/*")
+        }
+        binding.navBell.setOnClickListener {
+            findNavController().navigate(R.id.action_nav_patterns_to_nav_tips)
+        }
+        binding.navSettings.setOnClickListener {
+            findNavController().navigate(R.id.action_nav_patterns_to_nav_settings)
         }
 
         val adapter = PatternsRecyclerViewAdapter(PatternCardContent.ITEMS) { item ->
